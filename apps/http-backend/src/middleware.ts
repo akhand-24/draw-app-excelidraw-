@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken'
-const JWT_SECRET="itszzfkfk;jm"
+import { JWT_SECRET } from '@repo/backend-common/config';
 
 export async function usermiddleware(req:any,res:any,next:any){
-    const token= req.headers.authorization.split(" ")[1];
+    const token= req.headers.authorization;
     if(!token)
     {
         res.json({message:"No token received"})
