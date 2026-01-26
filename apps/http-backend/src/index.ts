@@ -84,12 +84,29 @@ app.post("/api/v1/room", usermiddleware, async function(req,res){
 
             }
         })
+        const roomId=(await newroom).id
 
-        res.json({message:"Room created",newroom})
+        res.json({message:"Room created",newroom,roomId})
 
     } catch (error) {
         return res.json({error});
     }
+})
+
+app.get("/api/v1/chats/:roomId",async function(req,res){
+    const roomId=Number(req.params.roomId);
+    const messages= await prismaClient.chat.findMany({
+        where:{
+            roomId
+        },
+        orderBy:{
+            id : "desc"
+        },
+        take: 50
+
+    })
+
+    res.json({messages});
 })
 
 app.listen(3001)

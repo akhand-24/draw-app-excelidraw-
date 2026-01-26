@@ -8,11 +8,13 @@
     "dev": "tsc -b && node ./dist/index.js"
   },
   "dependencies": {
+    "@repo/backend-common": "workspace:*",
+    "@repo/common": "workspace:*",
+    "@repo/db": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-     "@repo/backend-common":"workspace:*",
-     "@repo/common":"workspace:*",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/ws": "^8.18.1",
+    "dotenv": "^17.2.3",
     "jsonwebtoken": "^9.0.3",
     "ws": "^8.19.0"
   },
