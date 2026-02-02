@@ -7,9 +7,16 @@ import { prismaClient } from "@repo/db";
 import 'dotenv/config'
 const wss = new WebSocketServer({port:8000})
 
-const users:any[]=[];
 
-wss.on("connection",function(ws,req){
+interface User {
+  ws: WebSocket,
+  rooms: string[],
+  userId: string
+}
+const users:User[]|undefined=[];
+
+
+wss.on("connection",function connection(ws:any,req){
 
     const url=req.url
 
@@ -33,13 +40,14 @@ const userId=decodedtoken.userId;
     })
     
 
-    ws.on("message",async function message(data){
-            const parseddata=JSON.parse(data as unknown as string)
-console.log(parseddata)
+    ws.on("message",async function message(data:any){
+            const parseddata=JSON.parse(data)
+
             if(parseddata.type=="join_room")
             {
                 //@ts-ignore
                 const user=users.find(x => x.ws==ws)
+                if(user)
                 user.rooms.push(parseddata.roomId)
 
             }
@@ -57,10 +65,12 @@ console.log(parseddata)
                 const message=parseddata.message;
                 const roomId=parseddata.roomId
 
+
+
                 await prismaClient.chat.create({
                     data:{
                         message,
-                        roomId,
+                        roomId:Number(roomId),
                         userId
                     }
                 })
@@ -68,9 +78,10 @@ console.log(parseddata)
                 users.forEach(user =>{
                     if(user.rooms.includes(roomId)){
                         user.ws.send(
+
                         JSON.stringify({
                             type:"chat",
-                            message,
+                            message:message,
                             roomId
                         })
                         )

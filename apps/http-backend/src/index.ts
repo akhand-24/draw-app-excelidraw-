@@ -7,10 +7,13 @@ import { createRoomSchema, createUserSchema } from '@repo/common/types';
 import { signinSchema } from '@repo/common/types';
 import { prismaClient } from '@repo/db';
 import 'dotenv/config'
+import cors from 'cors'
+
 
 const app=express();
 
 app.use(express.json())
+app.use(cors())
 
 app.post("/api/v1/signup", async function(req,res){
        const parseddata =createUserSchema.safeParse(req.body)
