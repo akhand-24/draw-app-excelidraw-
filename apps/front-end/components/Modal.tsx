@@ -6,6 +6,7 @@ import { useState } from "react";
 export function AuthPage({ isSignin }: { isSignin: boolean }) {
   const [email,setemail]=useState("");
   const [password,setpassword]=useState("");
+  const [name,setname]=useState("")
 async function onclickhadler(){
 
     if(isSignin==true)
@@ -19,7 +20,7 @@ async function onclickhadler(){
         }
         else{
             const response= await axios.post(`${BACKEND_URL}/signup`,{
-                email,password
+                email,password,name
             })
 
             console.log(response.data);
@@ -33,6 +34,22 @@ async function onclickhadler(){
         <h1 className="text-white text-xl font-semibold mb-6 text-center">
           {isSignin ? "Sign In" : "Sign Up"}
         </h1>
+
+  {
+  !isSignin && (
+    <div className="mb-4">
+      <input
+        value={name}
+        onChange={(e) => setname(e.target.value)}
+        type="name"
+        placeholder="Name"
+        className="w-full px-4 py-2 rounded bg-[#242424] text-white placeholder-gray-400 
+                   focus:outline-none focus:ring-2 focus:ring-red-400"
+      />
+    </div>
+  )
+}
+
 
         {/* Email */}
         <div className="mb-4">

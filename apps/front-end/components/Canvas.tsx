@@ -12,14 +12,16 @@ export function CanvasClient({roomId}:{roomId:string}){
     
     useEffect(()=>{
         console.log("hello");
-        const ws=new WebSocket("ws://localhost:8000?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OWE0YzYzNy00OTQ2LTQ0ODUtOGRhZC02M2U3ZDk3MDZmMTMiLCJpYXQiOjE3NzAwNTk2MjF9.E3sMsEuTT1Zv3XriXIYOGIVBZIhLrE8z0HyCAI5pjYs")
+        const token=localStorage.getItem("token")
+        const ws=new WebSocket(`${WS_URL}?token=${token}`)
 console.log(ws);
 
-        ws.onopen=()=>{setSocket(ws)
+        ws.onopen=()=>{
+            setSocket(ws)
             
-            socket?.send(JSON.stringify({
+            ws.send(JSON.stringify({
                 type:"join_room",
-                roomId:roomId
+                roomId:(roomId)
             }))
         }
     },[]);

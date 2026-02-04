@@ -38,6 +38,9 @@ const userId=decodedtoken.userId;
         rooms:[],
         ws
     })
+
+    console.log("Client connected");
+    
     
 
     ws.on("message",async function message(data:any){
@@ -49,6 +52,8 @@ const userId=decodedtoken.userId;
                 const user=users.find(x => x.ws==ws)
                 if(user)
                 user.rooms.push(parseddata.roomId)
+
+                console.log(users)
 
             }
 
@@ -74,6 +79,8 @@ const userId=decodedtoken.userId;
                         userId
                     }
                 })
+
+                 console.log(users)
 
                 users.forEach(user =>{
                     if(user.rooms.includes(roomId)){
