@@ -80,20 +80,36 @@ app.post("/api/v1/room", usermiddleware, async function(req,res){
     const userId=req.userId;
 
     try {
-        const newroom= prismaClient.room.create({
+        const newroom=await prismaClient.room.create({
             data:{
                 slug:parseddata.data.name,
                 adminId:userId
 
             }
         })
-        const roomId=(await newroom).id
+        const roomId=newroom.id
 
         res.json({message:"Room created",newroom,roomId})
 
     } catch (error) {
         return res.json({error});
     }
+})
+
+app.post("/api/v1/getRoomId",async function(req,res){
+    const {roomname}=req.body;
+    try {
+         const roomId=await prismaClient.room.findFirst({
+        where:{
+            slug:roomname
+        }
+    })
+
+    res.json({roomId})
+    } catch (error) {
+        res.status(400).json({message:"room not found"})
+    }
+   
 })
 
 app.get("/api/v1/chats/:roomId",async function(req,res){

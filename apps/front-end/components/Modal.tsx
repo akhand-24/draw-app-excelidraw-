@@ -1,12 +1,14 @@
 "use client";
 import { BACKEND_URL } from "@/config";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 import { useState } from "react";
 export function AuthPage({ isSignin }: { isSignin: boolean }) {
   const [email,setemail]=useState("");
   const [password,setpassword]=useState("");
   const [name,setname]=useState("")
+  const router=useRouter()
 async function onclickhadler(){
 
     if(isSignin==true)
@@ -17,6 +19,9 @@ async function onclickhadler(){
 
             const token =response.data.token;
             localStorage.setItem("token",token);
+
+            router.push("/join-room")
+
         }
         else{
             const response= await axios.post(`${BACKEND_URL}/signup`,{
@@ -24,7 +29,7 @@ async function onclickhadler(){
             })
 
             console.log(response.data);
-            
+            router.push("/signin")
         }
     }
   return (
